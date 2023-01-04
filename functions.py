@@ -1,6 +1,7 @@
 from tkinter.filedialog import asksaveasfilename
 
 def save_file(window, text):
+    '''Save file'''
     filename = asksaveasfilename(defaultextension=".txt", filetypes=[("Text Files", "*.txt"), ('All Files', '*.*')])
     if not filename:
         return
