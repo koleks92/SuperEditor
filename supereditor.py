@@ -2,9 +2,7 @@
 
 from tkinter import *
 import tkinter as tk
-from tkinter.filedialog import asksaveasfilename
 import functions
-
 
 
 # Create a SuperEditor window
@@ -32,9 +30,9 @@ class Editor():
         menubar = Menu(self.window)
         #File Menu
         filemenu = Menu(menubar, tearoff=0)
-        filemenu.add_command(label="New", command='donothing')
-        filemenu.add_command(label="Open", command='donothing')
-        filemenu.add_command(label="Save", command=lambda: save_file(self.window,self.editor))
+        filemenu.add_command(label="New", command=lambda: functions.new_file(self.window, self.editor))
+        filemenu.add_command(label="Open", command=lambda: functions.open_file(self.window, self.editor))
+        filemenu.add_command(label="Save", command=lambda: functions.save_file(self.window,self.editor))
         filemenu.add_separator()
         filemenu.add_command(label="Exit", command=self.window.quit)
         menubar.add_cascade(label="File", menu=filemenu)
@@ -62,22 +60,6 @@ def main():
 
     # Rune the SuperEditor
     se_window.mainloop()
-
-def save_file(window, text):
-    filename = asksaveasfilename(defaultextension=".txt", filetypes=[("Text Files", "*.txt"), ('All Files', '*.*')])
-    if not filename:
-        return
-    else:
-        with open(filename, "w") as output_file:
-            text = text.get(1.0, tk.END)
-            output_file.write(text)
-        window.title(f"SuperEditor - {filename}")
-
-        
-
-
-
-
 
 if __name__ == "__main__":
     main()
