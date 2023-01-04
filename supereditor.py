@@ -34,7 +34,7 @@ class Editor():
         filemenu.add_command(label="Open", command=lambda: functions.open_file(self.window, self.editor))
         filemenu.add_command(label="Save", command=lambda: functions.save_file(self.window,self.editor))
         filemenu.add_separator()
-        filemenu.add_command(label="Exit", command=self.window.quit)
+        filemenu.add_command(label="Exit", command=lambda: functions.exit(self.window,self.editor))
         menubar.add_cascade(label="File", menu=filemenu)
         # Edit menu
             # TODO
