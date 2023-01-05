@@ -3,6 +3,8 @@ import tkinter.filedialog as fd
 
 filetypes = [("Text Files", "*.txt"), ('All Files', '*.*')]
 
+'''File menu'''
+
 def save_file(window, text):
     '''Save file'''
     filename = fd.asksaveasfilename(defaultextension=".txt", filetypes=filetypes)
@@ -45,9 +47,6 @@ def exit(window, text):
         window.quit()
     
 
-    
-
-
 def file_not_empty(window, text):
     msg_box = tk.messagebox.askquestion('Save me!', 'Do you want to save current file before opening a new file?',
                                         icon='warning')
@@ -55,6 +54,36 @@ def file_not_empty(window, text):
         save_file(window, text)        
     else:
         pass
+
+'''Edit Menu'''
+
+def undo(text):
+    pass
+
+def cut(text):
+    global data 
+    if text.selection_get():
+        data = text.selection_get()
+        text.delete('sel.first','sel.last')
+
+def copy(text):
+    global data
+    if text.selection_get():
+        data = text.selection_get()
+
+def paste(text):
+    global data
+    text.insert(tk.END, data)
+
+def delete(text):
+    if text.selection_get():
+        text.delete('sel.first','sel.last')
+
+def select_all(text):
+    '''Select all text'''
+    text.tag_add("sel", "1.0","end")
+    text.tag_config("sel",background="gray",foreground="white")
+
 
 
 
