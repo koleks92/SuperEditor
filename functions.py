@@ -1,5 +1,7 @@
 import tkinter as tk
 import tkinter.filedialog as fd
+from tkinter import font
+
 
 filetypes = [("Text Files", "*.txt"), ('All Files', '*.*')]
 
@@ -88,12 +90,8 @@ def select_all(text, event=None):
     else:
         text.tag_add("sel", "1.0","end")
         text.tag_config("sel",background="gray",foreground="white")
+        print('Down')
 
-
-'''Format'''
-
-def font_size(text):
-    text.configure(font=(0,20,0))
 
 
 

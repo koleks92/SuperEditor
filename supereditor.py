@@ -3,27 +3,87 @@
 from tkinter import *
 import tkinter as tk
 import functions
+from tkinter import font
+
+
 
 
 class Editor():
+
     def __init__(self, window):
         # Window + Title
         window.geometry('1200x800')
         window.title('SuperEditor')
+
         # Scrool bar
         scrollbar = Scrollbar(window)
         scrollbar.pack(side=RIGHT,fill=Y)
-        # Text area
-        editor = Text(window,width=400,height=450,yscrollcommand=scrollbar.set, undo = True)
-        editor.pack(fill=BOTH)
-        scrollbar.config(command = editor.yview)
-
+        
         # Selfs
         self.window = window
+        self.scrollbar = scrollbar
+
+
+
+
+    def format_bar(self):
+        
+        
+
+        # Create font list
+        font_list = []
+        for f in font.families():
+            font_list.append(f)
+        value_font = tk.StringVar(self.window)
+        value_font.set(font_list[5])
+        font_menu = tk.OptionMenu(self.window, value_font, *font_list)
+        font_menu.pack()
+
+        self.value_font = value_font
+    
+
+        
+    def text_area(self):
+        
+        #Func to change size
+        def size_choice(e):
+            user_font.config(size=e)
+        #Func to change font
+        def font_choice(e):
+            user_font.config(family=e)
+
+        # Create the sizes list
+        size_list = ["2", "4", "8", "10", "12", "14", "16",
+        "18", "20", "22", "24", "26", "28", "30", "32", "36"
+        ,"40", "44", "48", "56", "64"]
+        value_size = tk.StringVar(self.window)
+        value_size.set(size_list[5])
+        size_menu = tk.OptionMenu(self.window, value_size, *size_list,
+        command = size_choice)
+        size_menu.pack()
+
+        # Create font list
+        font_list = ["Roman", "Courier", "MS Serif", "MS Sans Serif", "Modern",
+        "Terminal", "Arial", "Arial Baltic", "Courier New", "MS Gothic", "Times New Roman",
+        "Tahoma", "Calibri", "Comic Sans MS", "Verdana"]
+ 
+        value_font = tk.StringVar(self.window)
+        value_font.set(font_list[0])
+        font_menu = tk.OptionMenu(self.window, value_font, *font_list, command=font_choice)
+        font_menu.pack()
+
+        # TEXT AREA
+        user_font = font.Font()
+        editor = Text(self.window, width=200, height= 200,yscrollcommand=self.scrollbar.set, undo = True,
+        font=user_font)
+        editor.pack(fill=BOTH)
+        self.scrollbar.config(command = editor.yview) 
+
+        # Self assigment
         self.editor = editor
-
-        editor.bind("<Control-A>", functions.select_all(editor))
-
+        
+        # Ctrl+A
+        editor.bind("<Control-A>",lambda event: functions.select_all(editor, event=event))
 
 
     def menu_bar(self):
@@ -50,7 +110,7 @@ class Editor():
         menubar.add_cascade(label="Edit", menu=editmenu)
         # Format menu
         formatmenu = Menu(menubar, tearoff=0)
-        formatmenu.add_command(label="Font", command=lambda: functions.font_size(self.editor))
+        formatmenu.add_command(label="Font...", command='TODO')
         menubar.add_cascade(label="Format", menu=formatmenu)
         # View menu
         viewmenu = Menu(menubar, tearoff=0)
@@ -67,16 +127,18 @@ class Editor():
 
 
 
-
 def main():
     # Create a SuperEditor window
     se_window = Tk()
     # Create a text editor
     editor = Editor(se_window)
+    # Text area with basic format
+    editor.text_area()
     # Create menubar
     editor.menu_bar()
     # Rune the SuperEditor
     se_window.mainloop()
+
 
 
 if __name__ == "__main__":
