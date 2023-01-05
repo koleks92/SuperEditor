@@ -15,6 +15,7 @@ class Editor():
         window.geometry('1200x800')
         window.title('SuperEditor')
 
+
         # Scrool bar
         scrollbar = Scrollbar(window)
         scrollbar.pack(side=RIGHT,fill=Y)
@@ -23,54 +24,78 @@ class Editor():
         self.window = window
         self.scrollbar = scrollbar
 
-
-
-
-    def format_bar(self):
-        
-        
-
-        # Create font list
-        font_list = []
-        for f in font.families():
-            font_list.append(f)
-        value_font = tk.StringVar(self.window)
-        value_font.set(font_list[5])
-        font_menu = tk.OptionMenu(self.window, value_font, *font_list)
-        font_menu.pack()
-
-        self.value_font = value_font
-    
-
-        
     def text_area(self):
+
+        format_frame = Frame(self.window, height = 30)
+        format_frame.pack( side = TOP )
         
         #Func to change size
         def size_choice(e):
-            user_font.config(size=e)
+            new_size = font.Font(size=e)
+            editor.tag_configure("size", font=new_size)
+            current_tags = editor.tag_names("sel.first")
+            editor.tag_add("size", "sel.first", "sel.last")            
         #Func to change font
         def font_choice(e):
             user_font.config(family=e)
+
+        #Func to make text bold
+        def bolder():
+            bold_font = font.Font(editor, editor.cget("font"))
+            bold_font.configure(weight="bold")
+
+            editor.tag_configure("bold", font=bold_font)
+
+            current_tags = editor.tag_names("sel.first")
+
+            if "bold" in current_tags:
+                editor.tag_remove("bold", "sel.first", "sel.last")
+            else:
+                editor.tag_add("bold", "sel.first", "sel.last")
+
+        #Func to make text italic
+        def italicer():
+            italic_font = font.Font(editor, editor.cget("font"))
+            italic_font.configure(slant="italic")
+
+            editor.tag_configure("italic", font=italic_font)
+
+            current_tags = editor.tag_names("sel.first")
+
+            if "italic" in current_tags:
+                editor.tag_remove("italic", "sel.first", "sel.last")
+            else:
+                editor.tag_add("italic", "sel.first", "sel.last")
+
 
         # Create the sizes list
         size_list = ["2", "4", "8", "10", "12", "14", "16",
         "18", "20", "22", "24", "26", "28", "30", "32", "36"
         ,"40", "44", "48", "56", "64"]
-        value_size = tk.StringVar(self.window)
+        value_size = tk.StringVar(format_frame)
         value_size.set(size_list[5])
-        size_menu = tk.OptionMenu(self.window, value_size, *size_list,
+        size_menu = tk.OptionMenu(format_frame, value_size, *size_list,
         command = size_choice)
-        size_menu.pack()
+        size_menu.pack(side="left")
 
         # Create font list
         font_list = ["Roman", "Courier", "MS Serif", "MS Sans Serif", "Modern",
         "Terminal", "Arial", "Arial Baltic", "Courier New", "MS Gothic", "Times New Roman",
         "Tahoma", "Calibri", "Comic Sans MS", "Verdana"]
  
-        value_font = tk.StringVar(self.window)
+        value_font = tk.StringVar(format_frame)
         value_font.set(font_list[0])
-        font_menu = tk.OptionMenu(self.window, value_font, *font_list, command=font_choice)
-        font_menu.pack()
+        font_menu = tk.OptionMenu(format_frame, value_font, *font_list, command=font_choice)
+        font_menu.pack(side = "left")
+
+        #Bold func
+        bold_button = Button(format_frame, text="Bold", command = bolder)
+        bold_button.pack(side="left")
+
+        #Italic func
+        italic_button = Button(format_frame, text="Italic", command = italicer)
+        italic_button.pack(side="left")
+
 
         # TEXT AREA
         user_font = font.Font()
@@ -83,6 +108,7 @@ class Editor():
         self.editor = editor
         
         # Ctrl+A
+        editor.bind("<Control-a>",lambda event: functions.select_all(editor, event=event))
         editor.bind("<Control-A>",lambda event: functions.select_all(editor, event=event))
 
 

@@ -82,16 +82,9 @@ def delete(text):
 
 def select_all(text, event=None):
     '''Select all text'''
-    if event:
-        print('Up')
-        text.tag_add("sel", "1.0","end")
-        text.tag_config("sel",background="gray",foreground="white")
-        return 'break'
-    else:
-        text.tag_add("sel", "1.0","end")
-        text.tag_config("sel",background="gray",foreground="white")
-        print('Down')
-
+    text.tag_add("sel", "1.0","end")
+    text.tag_config("sel",background="gray",foreground="white")
+    return 'break'
 
 
 
