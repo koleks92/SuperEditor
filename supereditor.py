@@ -37,21 +37,36 @@ class Editor():
         filemenu.add_command(label="Exit", command=lambda: functions.exit(self.window,self.editor))
         menubar.add_cascade(label="File", menu=filemenu)
         # Edit menu
-            # TODO
+        editmenu = Menu(menubar, tearoff=0)
+        editmenu.add_command(label="Undo", command='TODO')
+        editmenu.add_separator()
+        editmenu.add_command(label="Cut", command='TODO')
+        editmenu.add_command(label="Copy", command='TODO')
+        editmenu.add_command(label="Paste", command='TODO')
+        editmenu.add_command(label="Delete", command='TODO')
+        editmenu.add_separator()
+        editmenu.add_command(label="Select All", command='TODO')
+        menubar.add_cascade(label="Edit", menu=editmenu)
         # Format menu
-            # TODO
-        # View mnue
-            # TODO
-        # About menu
-            # TODO
+        formatmenu = Menu(menubar, tearoff=0)
+        formatmenu.add_command(label="Font", command='TODO')
+        menubar.add_cascade(label="Format", menu=formatmenu)
+        # View menu
+        viewmenu = Menu(menubar, tearoff=0)
+        viewmenu.add_command(label="Statusbar", command='TODO')
+        menubar.add_cascade(label="View", menu=viewmenu)
+                # About menu
+        aboutmenu = Menu(menubar, tearoff=0)
+        aboutmenu.add_command(label="Help", command='TODO')
+        aboutmenu.add_command(label="About", command='TODO')
+        menubar.add_cascade(label="About", menu=aboutmenu)
         
         # Add the menu bar
         self.window.config(menu=menubar)
 
 
 
-
-  
+ 
 
 def main():
     editor = Editor(se_window)
