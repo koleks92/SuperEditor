@@ -57,14 +57,13 @@ def file_not_empty(window, text):
 
 '''Edit Menu'''
 
-def undo(text):
-    pass
-
 def cut(text):
-    global data 
+    global data
+    # Button user
     if text.selection_get():
         data = text.selection_get()
         text.delete('sel.first','sel.last')
+
 
 def copy(text):
     global data
@@ -79,10 +78,25 @@ def delete(text):
     if text.selection_get():
         text.delete('sel.first','sel.last')
 
-def select_all(text):
+def select_all(text, event=None):
     '''Select all text'''
-    text.tag_add("sel", "1.0","end")
-    text.tag_config("sel",background="gray",foreground="white")
+    if event:
+        print('Up')
+        text.tag_add("sel", "1.0","end")
+        text.tag_config("sel",background="gray",foreground="white")
+        return 'break'
+    else:
+        text.tag_add("sel", "1.0","end")
+        text.tag_config("sel",background="gray",foreground="white")
+
+
+'''Format'''
+
+def font_size(text):
+    text.configure(font=(0,20,0))
+
+
+
 
 
 
