@@ -26,18 +26,39 @@ class Editor():
 
     def text_area(self):
 
+
+        # Create frame for format buttons/lists
         format_frame = Frame(self.window, height = 30)
         format_frame.pack( side = TOP )
         
         #Func to change size
         def size_choice(e):
-            new_size = font.Font(size=e)
-            editor.tag_configure("size", font=new_size)
-            current_tags = editor.tag_names("sel.first")
-            editor.tag_add("size", "sel.first", "sel.last")            
+            new_size = font.Font(editor, editor.cget("font"))
+            new_size.configure(size = e)
+
+            editor.tag_configure(e, font = new_size)
+
+            try:
+                current_tags = editor.tag_names("sel.first")
+                editor.tag_add(e, "sel.first", "sel.last")  
+            except:
+                pass
+          
+        
         #Func to change font
         def font_choice(e):
-            user_font.config(family=e)
+            user_font.config(family = e)
+            # new_font = font.Font(editor, editor.cget("font"))
+            # new_font.configure(family = e)
+
+            # editor.tag_configure(e, font = new_font)
+
+            # try:
+            #     current_tags = editor.tag_names("sel.first")
+            #     editor.tag_add(e, "sel.first", "sel.last")  
+            # except:
+            #     pass
+          
 
         #Func to make text bold
         def bolder():
@@ -67,6 +88,34 @@ class Editor():
             else:
                 editor.tag_add("italic", "sel.first", "sel.last")
 
+        # Func to underline the text
+        def underliner():
+            under_font = font.Font(editor, editor.cget("font"))
+            under_font.configure(underline=True)
+
+            editor.tag_configure("underline", font=under_font)
+
+            current_tags = editor.tag_names("sel.first")
+
+            if "underline" in current_tags:
+                editor.tag_remove("underline", "sel.first", "sel.last")
+            else:
+                editor.tag_add("underline", "sel.first", "sel.last")
+
+        # Func to overstrike the text
+        def overstriker():
+            over_font = font.Font(editor, editor.cget("font"))
+            over_font.configure(overstrike=True)
+
+            editor.tag_configure("overstrike", font=over_font)
+
+            current_tags = editor.tag_names("sel.first")
+
+            if "overstrike" in current_tags:
+                editor.tag_remove("overstrike", "sel.first", "sel.last")
+            else:
+                editor.tag_add("overstrike", "sel.first", "sel.last")
+
 
         # Create the sizes list
         size_list = ["2", "4", "8", "10", "12", "14", "16",
@@ -95,6 +144,14 @@ class Editor():
         #Italic func
         italic_button = Button(format_frame, text="Italic", command = italicer)
         italic_button.pack(side="left")
+
+        #Underline_func
+        under_button = Button(format_frame, text="Underline", command = underliner)
+        under_button.pack(side="left")
+
+        #Overstrike_func
+        over_button = Button(format_frame, text="Overstrike", command= overstriker)
+        over_button.pack(side="left")
 
 
         # TEXT AREA
