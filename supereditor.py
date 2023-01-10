@@ -42,22 +42,14 @@ class Editor():
                 current_tags = editor.tag_names("sel.first")
                 editor.tag_add(e, "sel.first", "sel.last")  
             except:
-                pass
-          
+                editor.tag_add("sel", "1.0","end")
+                editor.tag_add(e, "sel.first", "sel.last")  
+
+         
         
         #Func to change font
         def font_choice(e):
             user_font.config(family = e)
-            # new_font = font.Font(editor, editor.cget("font"))
-            # new_font.configure(family = e)
-
-            # editor.tag_configure(e, font = new_font)
-
-            # try:
-            #     current_tags = editor.tag_names("sel.first")
-            #     editor.tag_add(e, "sel.first", "sel.last")  
-            # except:
-            #     pass
           
 
         #Func to make text bold
@@ -102,6 +94,8 @@ class Editor():
             else:
                 editor.tag_add("underline", "sel.first", "sel.last")
 
+            
+
         # Func to overstrike the text
         def overstriker():
             over_font = font.Font(editor, editor.cget("font"))
@@ -115,6 +109,9 @@ class Editor():
                 editor.tag_remove("overstrike", "sel.first", "sel.last")
             else:
                 editor.tag_add("overstrike", "sel.first", "sel.last")
+
+            
+
 
 
         # Create the sizes list
@@ -156,10 +153,12 @@ class Editor():
 
         # TEXT AREA
         user_font = font.Font()
+
         editor = Text(self.window, width=200, height= 200,yscrollcommand=self.scrollbar.set, undo = True,
         font=user_font)
         editor.pack(fill=BOTH)
         self.scrollbar.config(command = editor.yview) 
+        print(f'User {user_font}')
 
         # Self assigment
         self.editor = editor
@@ -191,18 +190,14 @@ class Editor():
         editmenu.add_separator()
         editmenu.add_command(label="Select All", command=lambda: functions.select_all(self.editor), accelerator='Ctrl-A')
         menubar.add_cascade(label="Edit", menu=editmenu)
-        # Format menu
-        formatmenu = Menu(menubar, tearoff=0)
-        formatmenu.add_command(label="Font...", command='TODO')
-        menubar.add_cascade(label="Format", menu=formatmenu)
         # View menu
         viewmenu = Menu(menubar, tearoff=0)
-        viewmenu.add_command(label="Statusbar", command='TODO')
+        viewmenu.add_command(label="Fullscreen", command = lambda: functions.fullscreen(self.window))
         menubar.add_cascade(label="View", menu=viewmenu)
         # About menu
         aboutmenu = Menu(menubar, tearoff=0)
-        aboutmenu.add_command(label="Help", command='TODO')
-        aboutmenu.add_command(label="About", command='TODO')
+        aboutmenu.add_command(label="Help", command=lambda: functions.help(self.window))
+        aboutmenu.add_command(label="About", command=lambda: functions.about(self.window))
         menubar.add_cascade(label="About", menu=aboutmenu)
         
         # Add the menu bar

@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.filedialog as fd
 from tkinter import font
+from tkinter import *
 
 
 filetypes = [("Text Files", "*.txt"), ('All Files', '*.*')]
@@ -85,6 +86,47 @@ def select_all(text, event=None):
     text.tag_add("sel", "1.0","end")
     text.tag_config("sel",background="gray",foreground="white")
     return 'break'
+
+'''View menu'''
+
+def fullscreen(window):
+    if window.attributes('-fullscreen') == 0:
+        window.attributes('-fullscreen', True)
+    else:
+        window.attributes('-fullscreen', False)
+
+'''About menu'''
+
+def about(window):
+    global pop
+    pop = Toplevel(window)
+    pop.title('About SuperEditor')
+    pop.geometry(f"+600+400")
+
+    pop_label = Label(pop, text="App created by koleks92")
+    pop_label.pack (pady=10)
+    
+    pop_label_2 = Label(pop, text="Final project for CS50P")
+    pop_label_2.pack (pady=20)
+
+def help(window):
+    global pop
+    pop = Toplevel(window)
+    pop.title('Help')
+    pop.geometry("600x400")
+
+    pop_label = Label(pop, text="How to use SuperEditor", font=("Helvetica", 16))
+    pop_label.pack (pady=10)
+
+
+
+
+
+
+
+
+
+
 
 
 
