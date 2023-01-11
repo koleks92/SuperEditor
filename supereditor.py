@@ -6,8 +6,6 @@ import functions
 from tkinter import font
 
 
-
-
 class Editor():
 
     def __init__(self, window):
@@ -26,75 +24,47 @@ class Editor():
 
     def text_area(self):
 
-
         # Create frame for format buttons/lists
         format_frame = Frame(self.window, height = 30)
         format_frame.pack( side = TOP )
-        
-        #Func to change size
-        def size_choice(e):
-            new_size = font.Font(editor, editor.cget("font"))
-            new_size.configure(size = e)
-
-            editor.tag_configure(e, font = new_size)
-
-            try:
-                current_tags = editor.tag_names("sel.first")
-                editor.tag_add(e, "sel.first", "sel.last")  
-            except:
-                editor.tag_add("sel", "1.0","end")
-                editor.tag_add(e, "sel.first", "sel.last")  
-
-         
-        
-        #Func to change font
-        def font_choice(e):
-            user_font.config(family = e)
-          
+                
 
         #Func to make text bold
-        def bolder():
-            bold_font = font.Font(editor, editor.cget("font"))
-            bold_font.configure(weight="bold")
-
-            editor.tag_configure("bold", font=bold_font)
-
+        def bolder(event):
             current_tags = editor.tag_names("sel.first")
 
             if "bold" in current_tags:
                 editor.tag_remove("bold", "sel.first", "sel.last")
             else:
                 editor.tag_add("bold", "sel.first", "sel.last")
+                bold_font = font.Font(editor, editor.cget("font"))
+                bold_font.configure(weight="bold")
+                editor.tag_configure("bold", font=bold_font)
 
         #Func to make text italic
         def italicer():
-            italic_font = font.Font(editor, editor.cget("font"))
-            italic_font.configure(slant="italic")
-
-            editor.tag_configure("italic", font=italic_font)
-
             current_tags = editor.tag_names("sel.first")
 
             if "italic" in current_tags:
                 editor.tag_remove("italic", "sel.first", "sel.last")
             else:
                 editor.tag_add("italic", "sel.first", "sel.last")
+                italic_font = font.Font(editor, editor.cget("font"))
+                italic_font.configure(slant="italic")
+                editor.tag_configure("italic", font=italic_font)
 
         # Func to underline the text
         def underliner():
-            under_font = font.Font(editor, editor.cget("font"))
-            under_font.configure(underline=True)
-
-            editor.tag_configure("underline", font=under_font)
-
             current_tags = editor.tag_names("sel.first")
 
             if "underline" in current_tags:
                 editor.tag_remove("underline", "sel.first", "sel.last")
             else:
                 editor.tag_add("underline", "sel.first", "sel.last")
-
-            
+                under_font = font.Font(editor, editor.cget("font"))
+                under_font.configure(underline=True)
+                editor.tag_configure("underline", font=under_font)
+         
 
         # Func to overstrike the text
         def overstriker():
@@ -109,30 +79,7 @@ class Editor():
                 editor.tag_remove("overstrike", "sel.first", "sel.last")
             else:
                 editor.tag_add("overstrike", "sel.first", "sel.last")
-
-            
-
-
-
-        # Create the sizes list
-        size_list = ["2", "4", "8", "10", "12", "14", "16",
-        "18", "20", "22", "24", "26", "28", "30", "32", "36"
-        ,"40", "44", "48", "56", "64"]
-        value_size = tk.StringVar(format_frame)
-        value_size.set(size_list[5])
-        size_menu = tk.OptionMenu(format_frame, value_size, *size_list,
-        command = size_choice)
-        size_menu.pack(side="left")
-
-        # Create font list
-        font_list = ["Roman", "Courier", "MS Serif", "MS Sans Serif", "Modern",
-        "Terminal", "Arial", "Arial Baltic", "Courier New", "MS Gothic", "Times New Roman",
-        "Tahoma", "Calibri", "Comic Sans MS", "Verdana"]
- 
-        value_font = tk.StringVar(format_frame)
-        value_font.set(font_list[0])
-        font_menu = tk.OptionMenu(format_frame, value_font, *font_list, command=font_choice)
-        font_menu.pack(side = "left")
+       
 
         #Bold func
         bold_button = Button(format_frame, text="Bold", command = bolder)
@@ -153,23 +100,35 @@ class Editor():
 
         # TEXT AREA
         user_font = font.Font()
-
         editor = Text(self.window, width=200, height= 200,yscrollcommand=self.scrollbar.set, undo = True,
         font=user_font)
         editor.pack(fill=BOTH)
         self.scrollbar.config(command = editor.yview) 
-        print(f'User {user_font}')
 
         # Self assigment
         self.editor = editor
+        self.user_font = user_font
         
-        # Ctrl+A
-        editor.bind("<Control-a>",lambda event: functions.select_all(editor, event=event))
-        editor.bind("<Control-A>",lambda event: functions.select_all(editor, event=event))
+        # BInds
+        editor.bind_all("<Control-a>",lambda event: functions.select_all(editor, event=event))
 
 
     def menu_bar(self):
         menubar = Menu(self.window)
+        
+        #Font family subemnu
+        font_menu = Menu(menubar, tearoff=0)
+        font_list = ["Roman", "Courier", "MS Serif", "MS Sans Serif", "Modern",
+        "Terminal", "Arial", "Arial Baltic", "Courier New", "MS Gothic", "Times New Roman",
+        "Tahoma", "Calibri", "Comic Sans MS", "Verdana"]
+        for font in font_list:
+            font_menu.add_command(label=font, command = lambda font=font: self.user_font.config(family=font))
+        
+        #Font size submenu
+        size_menu = Menu(menubar, tearoff=0)
+        for size in range(1,33):
+            size_menu.add_command(label=str(size), command = lambda size=size: self.user_font.config(size=size))
+        
         #File Menu
         filemenu = Menu(menubar, tearoff=0)
         filemenu.add_command(label="New", command=lambda: functions.new_file(self.window, self.editor))
@@ -180,7 +139,7 @@ class Editor():
         menubar.add_cascade(label="File", menu=filemenu)
         # Edit menu
         editmenu = Menu(menubar, tearoff=0)
-        editmenu.add_command(label="Undo", command=self.editor.edit_undo)
+        editmenu.add_command(label="Undo", command=self.editor.edit_undo, accelerator="Ctrl+Z")
         editmenu.add_command(label="Redo", command=self.editor.edit_redo)
         editmenu.add_separator()
         editmenu.add_command(label="Cut", command=lambda: functions.cut(self.editor), accelerator='Ctrl-X')
@@ -190,6 +149,13 @@ class Editor():
         editmenu.add_separator()
         editmenu.add_command(label="Select All", command=lambda: functions.select_all(self.editor), accelerator='Ctrl-A')
         menubar.add_cascade(label="Edit", menu=editmenu)
+        # Format menu
+        formatmenu = Menu(menubar, tearoff=0)
+        formatmenu.add_cascade(label="Font", menu=font_menu)
+        formatmenu.add_cascade(label="Size", menu=size_menu)
+        formatmenu.add_command(label="Background color", command=lambda: functions.self.bg_color(self.editor))
+        formatmenu.add_command(label="Font color", command= lambda: functions.text_color(self.editor))
+        menubar.add_cascade(label="Format", menu=formatmenu)
         # View menu
         viewmenu = Menu(menubar, tearoff=0)
         viewmenu.add_command(label="Fullscreen", command = lambda: functions.fullscreen(self.window))

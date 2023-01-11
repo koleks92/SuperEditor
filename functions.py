@@ -2,6 +2,7 @@ import tkinter as tk
 import tkinter.filedialog as fd
 from tkinter import font
 from tkinter import *
+from tkinter.colorchooser import askcolor
 
 
 filetypes = [("Text Files", "*.txt"), ('All Files', '*.*')]
@@ -46,8 +47,8 @@ def exit(window, text):
     icon='warning')
     if msg_box == 'yes':
         save_file(window, text)        
-    else:
-        window.quit()
+
+    window.quit()
     
 
 def file_not_empty(window, text):
@@ -113,10 +114,29 @@ def help(window):
     global pop
     pop = Toplevel(window)
     pop.title('Help')
-    pop.geometry("600x400")
+    pop.geometry("900x400")
 
     pop_label = Label(pop, text="How to use SuperEditor", font=("Helvetica", 16))
     pop_label.pack (pady=10)
+
+    pop_label_2 = Label(pop, text='If you want to create a new file, save current file or open other file, click "File" option\nIf you want to change font family, font size, font color or background color, click "Format" option\nIf you want to change to fullscreen, click "View" option\nIf you want to undo/redo action, copy, cut, paste or select all, click "Edit" option')
+    pop_label_2.pack (pady=20)
+
+    pop_label_3 = Label(pop, text="If you want to make text bold, italic, underlined or overstruk,\nselect text or select all (Ctrl+A) and choose option from menu")
+    pop_label_3.pack (pady=30)
+'''Format menu'''
+def text_color(text):
+    (triple, hexstr) = askcolor()
+    if hexstr:
+        text.config(fg = hexstr)
+
+def bg_color(text):
+    (triple, hexstr) = askcolor()
+    if hexstr:
+        text.config(bg = hexstr)
+
+
+
 
 
 
